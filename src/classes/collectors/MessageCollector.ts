@@ -30,8 +30,8 @@ export class MessageCollector extends BaseCollector<Message> {
 
         this.client.once('messageCreate', async message => {
             this._isEnded();
-            
-            if (this.userID && message.member?.id !== this.userID) return;
+
+            if (this.userID && message.author?.id !== this.userID) return;
             if (this.channelID && message.channel.id !== this.channelID) return;
             if (this.guildID && message.guildID !== this.guildID) return;
 
