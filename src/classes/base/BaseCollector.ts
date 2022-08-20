@@ -57,7 +57,7 @@ export class BaseCollector<Collected extends unknown = any> extends EventEmitter
     }
 
     public start(): void {
-        this._timer = setTimeout(() => this.stop('timeout'));
+        this._timer = setTimeout(() => this.stop('timeout'), this.timer);
     }
 
     public stop(reason?: BaseCollectorEndReason|null): void {
@@ -66,11 +66,21 @@ export class BaseCollector<Collected extends unknown = any> extends EventEmitter
         clearTimeout(this.timer);
         this._timer = undefined;
         this.ended = true;
-
+        this.endReason = reason;
+        
         this.emit('end', reason);
     }
 
     public resetTimer(): void {
         if (this._timer) this._timer = setTimeout(() => this.stop('timeout'));
+    }
+
+    protected _isEnded(): boolean {
+        if (this.ended || this.maxCollection && this.collected.size >= this.maxCollection) {
+            if (!this.ended) this.stop('collectionLimit');
+            return true;
+        }
+
+        return false;
     }
 }

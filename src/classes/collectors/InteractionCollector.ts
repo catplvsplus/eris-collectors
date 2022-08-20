@@ -38,12 +38,11 @@ export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownIn
     }
 
     private _collect(): void {
-        this.client.once('interactionCreate', async interaction => {
-            if (this.ended || this.maxCollection && this.collected.size >= this.maxCollection) {
-                if (!this.ended) this.stop('collectionLimit');
-                return;
-            }
+        this._isEnded();
 
+        this.client.once('interactionCreate', async interaction => {
+            this._isEnded();
+            
             if (this.interactionType && interaction.type !== this.interactionType) return;
             if (!this._isPong(interaction)) {
                 if (this.guildID && interaction.guildID !== this.guildID) return;

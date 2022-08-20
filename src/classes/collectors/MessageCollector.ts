@@ -26,12 +26,11 @@ export class MessageCollector extends BaseCollector<Message> {
     }
 
     private _collect(): void {
-        this.client.once('messageCreate', async message => {
-            if (this.ended || this.maxCollection && this.collected.size >= this.maxCollection) {
-                if (!this.ended) this.stop('collectionLimit');
-                return;
-            }
+        this._isEnded();
 
+        this.client.once('messageCreate', async message => {
+            this._isEnded();
+            
             if (this.userID && message.member?.id !== this.userID) return;
             if (this.channelID && message.channel.id !== this.channelID) return;
             if (this.guildID && message.guildID !== this.guildID) return;

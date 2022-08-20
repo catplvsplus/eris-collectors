@@ -36,12 +36,11 @@ export class ReactionCollector extends BaseCollector<Reaction> {
     }
 
     private _collect(): void {
-        this.client.on('messageReactionAdd', async (message, emoji, reactor) => {
-            if (this.ended || this.maxCollection && this.collected.size >= this.maxCollection) {
-                if (!this.ended) this.stop('collectionLimit');
-                return;
-            }
+        this._isEnded();
 
+        this.client.on('messageReactionAdd', async (message, emoji, reactor) => {
+            this._isEnded();
+            
             const reaction: Reaction = { ...emoji, message, reactor };
 
             if (this.userID && reactor.id !== this.userID) return;
