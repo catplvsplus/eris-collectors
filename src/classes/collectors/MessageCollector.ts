@@ -1,32 +1,40 @@
-import { Message, TextableChannel } from 'eris';
+import { Guild, Member, Message, TextableChannel, User } from 'eris';
 import { BaseCollector, BaseCollectorOptions } from '../base/BaseCollector';
 
 export interface MessageCollectorOptions extends BaseCollectorOptions<Message> {
-    channel?: TextableChannel;
+    user?: User|Member|string;
+    channel?: TextableChannel|string;
+    guild?: Guild|string;
 }
 
 export class MessageCollector extends BaseCollector<Message> {
-    public channel?: TextableChannel;
+    public userID?: string;
+    public channelID?: string;
+    public guildID?: string;
     
     constructor(options: MessageCollectorOptions) {
         super(options);
 
-        this.channel = options.channel;
+        this.userID = typeof options.user == 'string' ? options.user : options.user?.id;
+        this.channelID = typeof options.channel == 'string' ? options.channel : options.channel?.id;
+        this.guildID = typeof options.guild == 'string' ? options.guild : options.guild?.id;
     }
 
     public start(): void {
         super.start();
-        this.collect();        
+        this._collect();        
     }
 
-    private collect(): void {
+    private _collect(): void {
         this.client.once('messageCreate', async message => {
             if (this.ended || this.maxCollection && this.collected.size >= this.maxCollection) {
                 if (!this.ended) this.stop('collectionLimit');
                 return;
             }
 
-            if (this.channel && message.channel.id !== this.channel.id) return;
+            if (this.userID && message.member?.id !== this.userID) return;
+            if (this.channelID && message.channel.id !== this.channelID) return;
+            if (this.guildID && message.guildID !== this.guildID) return;
 
             const msg = await this.client.getMessage(message.channel.id, message.id);
             if (this.filter && !(await Promise.resolve(this.filter(msg)))) return;
@@ -34,7 +42,7 @@ export class MessageCollector extends BaseCollector<Message> {
             this.collected.set(msg.id, msg);
             this.emit('collect', msg);
 
-            this.collect();
+            this._collect();
         });
     }
 }
