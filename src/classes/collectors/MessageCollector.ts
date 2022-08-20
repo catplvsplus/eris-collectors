@@ -31,10 +31,10 @@ export class MessageCollector extends BaseCollector<Message<PossiblyUncachedText
         this.client.once('messageCreate', async message => {
             this._isEnded();
 
-            if (this.userID && message.author.id !== this.userID) return;
-            if (this.channelID && message.channel.id !== this.channelID) return;
-            if (this.guildID && message.guildID !== this.guildID) return;
-            if (this.filter && !(await Promise.resolve(this.filter(message)))) return;
+            if (!this.userID || this.userID && message.author.id !== this.userID) return;
+            if (!this.channelID || this.channelID && message.channel.id !== this.channelID) return;
+            if (!this.guildID || this.guildID && message.guildID !== this.guildID) return;
+            if (!this.filter || this.filter && !(await Promise.resolve(this.filter(message)))) return;
             
             this.collected.set(message.id, message);
             this.emit('collect', message);

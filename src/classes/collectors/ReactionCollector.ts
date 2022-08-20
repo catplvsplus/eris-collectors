@@ -40,13 +40,16 @@ export class ReactionCollector extends BaseCollector<Reaction> {
 
         this.client.on('messageReactionAdd', async (message, emoji, reactor) => {
             this._isEnded();
-            
+
             const reaction: Reaction = { ...emoji, message, reactor };
 
-            if (this.userID && reactor.id !== this.userID) return;
-            if (this.channelID && message.channel.id !== this.channelID) return;
-            if (this.guildID && message.guildID !== this.guildID) return;
-            if (this.filter && !(await Promise.resolve(this.filter(reaction)))) return;
+            if (!this.userID || this.userID && reactor.id !== this.userID) return;
+            if (!this.messageID || this.messageID && message.id !== this.messageID) return;
+            if (!this.channelID || this.channelID && message.channel.id !== this.channelID) return;
+            if (!this.guildID || this.guildID && message.guildID !== this.guildID) return;
+            if (!this.emojiName || this.emojiName && reaction.name !== this.emojiName) return;
+            if (!this.emojiId || this.emojiId && reaction.id !== this.emojiId) return;
+            if (!this.filter || this.filter && !(await Promise.resolve(this.filter(reaction)))) return;
 
             this.collected.set(reaction.name, reaction);
             this.emit('collect', reaction);

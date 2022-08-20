@@ -42,25 +42,27 @@ export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownIn
 
         this.client.once('interactionCreate', async interaction => {
             this._isEnded();
-            
-            if (this.interactionType && interaction.type !== this.interactionType) return;
+
+            if (!this.interactionType || this.interactionType && interaction.type !== this.interactionType) return;
             if (!this._isPong(interaction)) {
-                if (this.guildID && interaction.guildID !== this.guildID) return;
-                if (this.channelID && interaction.channel?.id !== this.channelID) return;
-                if (this.userID && interaction.user?.id !== this.channelID) return;
+                if (!this.guildID || this.guildID && interaction.guildID !== this.guildID) return;
+                if (!this.channelID || this.channelID && interaction.channel?.id !== this.channelID) return;
+                if (!this.userID || this.userID && interaction.user?.id !== this.channelID) return;
 
                 if (this._isMessageComponent(interaction)) {
-                    if (this.customID && interaction.data.custom_id !== this.customID) return;
+                    if (!this.customID || this.customID && interaction.data.custom_id !== this.customID) return;
                     
                     const parent = await interaction.getOriginalMessage();
-                    if (this.messageID && parent.id !== this.messageID) return;
+                    if (!this.messageID || this.messageID && parent.id !== this.messageID) return;
                 }
 
                 if (this._isCommand(interaction) || this._isAutocomplete(interaction)) {
-                    if (this.commandName && interaction.data.name !== this.commandName) return;
+                    if (!this.commandName || this.commandName && interaction.data.name !== this.commandName) return;
                 }
             }
 
+            if (!this.filter || this.filter && !(await Promise.resolve(this.filter(interaction)))) return;
+            
             this.collected.set(interaction.id, interaction);
             this._collect();
         });
