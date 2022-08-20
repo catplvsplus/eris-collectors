@@ -5,9 +5,9 @@ import { Collection } from '../Collection';
 
 export type BaseCollectorEndReason = 'timeout'|'collectionLimit'|string;
 
-export interface BaseCollectorOptions<Collected extends any = any> {
+export interface BaseCollectorOptions<Collected extends unknown = any, Key extends unknown = any> {
     captureRejections?: boolean;
-    collected?: Collection<string, Collected>;
+    collected?: Collection<Key, Collected>;
     maxCollection?: number;
     filter?: (data: Collected) => Awaitable<boolean|void|undefined|null>;
     client: Client;
@@ -19,7 +19,7 @@ export interface BaseCollectorEvents<Collected extends unknown> {
     collect: [collected: Collected];
 }
 
-export interface BaseCollector<Collected extends unknown = any> extends EventEmitter {
+export interface BaseCollector<Collected extends unknown = any, Key extends unknown = string> extends EventEmitter {
     on<E extends keyof BaseCollectorEvents<Collected>>(event: E, listener: (...args: BaseCollectorEvents<Collected>[E]) => Awaitable<void>): this;
     on<E extends string|symbol>(event: Exclude<E, keyof BaseCollectorEvents<Collected>>, listener: (...args: any) => Awaitable<void>): this;
 
@@ -36,17 +36,17 @@ export interface BaseCollector<Collected extends unknown = any> extends EventEmi
     removeAllListeners(event?: string|symbol): this;
 }
 
-export class BaseCollector<Collected extends unknown = any> extends EventEmitter {
+export class BaseCollector<Collected extends unknown = any, Key extends unknown = string> extends EventEmitter {
     public client: Client;
     public timer: number;
     public ended: boolean = false;
     public maxCollection: number;
-    public collected: Collection<string, Collected>;
+    public collected: Collection<Key, Collected>;
     public filter?: (data: Collected) => Awaitable<boolean|void|undefined|null>;
     public endReason?: BaseCollectorEndReason|null;
     protected _timer?: NodeJS.Timeout;
 
-    constructor(options: BaseCollectorOptions<Collected>) {
+    constructor(options: BaseCollectorOptions<Collected, Key>) {
         super(options);
 
         this.client = options.client;

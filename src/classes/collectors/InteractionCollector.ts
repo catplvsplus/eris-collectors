@@ -8,7 +8,7 @@ export interface InteractionCollectorOptions extends BaseCollectorOptions<AnyInt
     guild?: Guild|string;
     custom_id?: string;
     commandName?: string;
-    interactionType?: keyof Constants["InteractionTypes"];
+    interactionType?: keyof Constants["InteractionTypes"]|number;
 }
 
 export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownInteraction> {
@@ -29,7 +29,7 @@ export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownIn
         this.guildID = typeof options.guild == 'string' ? options.guild : options.guild?.id;
         this.customID = options.custom_id;
         this.commandName = options.commandName;
-        this.interactionType = options.interactionType ? Constants.InteractionTypes[options.interactionType] : undefined;
+        this.interactionType = typeof options.interactionType == 'string' ? Constants.InteractionTypes[options.interactionType] : options.interactionType;
     }
 
     public start(): void {
@@ -60,10 +60,11 @@ export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownIn
                     if (this.commandName && interaction.data.name !== this.commandName) return this._collect();
                 }
             }
-
-            if (this.filter && !(await Promise.resolve(this.filter(interaction)))) return this._collect();
             
+            if (this.filter && !(await Promise.resolve(this.filter(interaction)))) return this._collect();
+
             this.collected.set(interaction.id, interaction);
+            this.emit('collect', interaction);
             this._collect();
         });
     }

@@ -2,7 +2,9 @@ import { Guild, Member, Message, TextableChannel, User } from 'eris';
 import { Reaction } from '../../utils/util';
 import { BaseCollector, BaseCollectorOptions } from '../base/BaseCollector';
 
-export interface ReactionCollectorOptions extends BaseCollectorOptions<Reaction> {
+export type ReactionCollectorKey = [userID: string, emoji: string];
+
+export interface ReactionCollectorOptions extends BaseCollectorOptions<Reaction, ReactionCollectorKey> {
     user?: User|Member|string;
     message?: Message|string;
     channel?: TextableChannel|string;
@@ -11,7 +13,7 @@ export interface ReactionCollectorOptions extends BaseCollectorOptions<Reaction>
     emojiId?: string;
 }
 
-export class ReactionCollector extends BaseCollector<Reaction> {
+export class ReactionCollector extends BaseCollector<Reaction, ReactionCollectorKey> {
     public userID?: string;
     public messageID?: string;
     public channelID?: string;
@@ -38,7 +40,7 @@ export class ReactionCollector extends BaseCollector<Reaction> {
     private _collect(): void {
         if (this._isEnded()) return;
 
-        this.client.on('messageReactionAdd', async (message, emoji, reactor) => {
+        this.client.once('messageReactionAdd', async (message, emoji, reactor) => {
             if (this._isEnded()) return;
 
             const reaction: Reaction = { ...emoji, message, reactor };
@@ -51,7 +53,7 @@ export class ReactionCollector extends BaseCollector<Reaction> {
             if (this.emojiId && reaction.id !== this.emojiId) return this._collect();
             if (this.filter && !(await Promise.resolve(this.filter(reaction)))) return this._collect();
 
-            this.collected.set(reaction.name, reaction);
+            this.collected.set([reaction.reactor.id, reaction.reactor.id], reaction);
             this.emit('collect', reaction);
 
             this._collect();
