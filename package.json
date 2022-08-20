@@ -1,7 +1,7 @@
 {
   "name": "eris-collectors",
   "description": "Collectors for eris based bots",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "GhexterCortes",
   "main": "dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -12,7 +12,12 @@
   "bugs": {
     "url": "https://github.com/GhexterCortes/eris-collectors/issues"
   },
-  "keywords": ["eris", "collection", "collector", "discord"],
+  "keywords": [
+    "eris",
+    "collection",
+    "collector",
+    "discord"
+  ],
   "files": [
     "dist",
     "LICENSE",
