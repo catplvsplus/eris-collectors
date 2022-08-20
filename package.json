@@ -13,6 +13,7 @@
   "scripts": {
     "clean": "npx rimraf dist",
     "build": "yarn run clean && npx tsc",
+    "build:publish": "yarn run build && yarn publish",
     "test": "yarn run build && cd test && node ."
   },
   "devDependencies": {
