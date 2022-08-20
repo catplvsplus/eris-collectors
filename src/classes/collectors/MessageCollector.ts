@@ -1,13 +1,13 @@
-import { Guild, Member, Message, TextableChannel, User } from 'eris';
+import { Guild, Member, Message, PossiblyUncachedTextableChannel, TextableChannel, User } from 'eris';
 import { BaseCollector, BaseCollectorOptions } from '../base/BaseCollector';
 
-export interface MessageCollectorOptions extends BaseCollectorOptions<Message> {
+export interface MessageCollectorOptions extends BaseCollectorOptions<Message<PossiblyUncachedTextableChannel>> {
     user?: User|Member|string;
     channel?: TextableChannel|string;
     guild?: Guild|string;
 }
 
-export class MessageCollector extends BaseCollector<Message> {
+export class MessageCollector extends BaseCollector<Message<PossiblyUncachedTextableChannel>> {
     public userID?: string;
     public channelID?: string;
     public guildID?: string;
@@ -34,12 +34,10 @@ export class MessageCollector extends BaseCollector<Message> {
             if (this.userID && message.author.id !== this.userID) return;
             if (this.channelID && message.channel.id !== this.channelID) return;
             if (this.guildID && message.guildID !== this.guildID) return;
-
-            const msg = await this.client.getMessage(message.channel.id, message.id);
-            if (this.filter && !(await Promise.resolve(this.filter(msg)))) return;
+            if (this.filter && !(await Promise.resolve(this.filter(message)))) return;
             
-            this.collected.set(msg.id, msg);
-            this.emit('collect', msg);
+            this.collected.set(message.id, message);
+            this.emit('collect', message);
 
             this._collect();
         });
