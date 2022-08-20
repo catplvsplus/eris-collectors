@@ -5,7 +5,7 @@ export interface InteractionCollectorOptions extends BaseCollectorOptions<Intera
 
 }
 
-export class InteractionCollector extends BaseCollector {
+export class InteractionCollector extends BaseCollector<Interaction> {
     constructor(options: InteractionCollectorOptions) {
         super(options);
     }

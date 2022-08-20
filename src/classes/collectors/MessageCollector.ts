@@ -6,11 +6,15 @@ export interface MessageCollectorOptions extends BaseCollectorOptions<Message> {
 }
 
 export class MessageCollector extends BaseCollector<Message> {
-    protected channel: TextableChannel;
+    public channel: TextableChannel;
     
     constructor(options: MessageCollectorOptions) {
         super(options);
 
         this.channel = options.channel;
+    }
+
+    public collect(): void {
+        
     }
 }

@@ -7,7 +7,7 @@ export interface ReactionCollectorOptions extends BaseCollectorOptions<Reaction>
 }
 
 export class ReactionCollector extends BaseCollector<Reaction> {
-    protected message: Message;
+    public message: Message;
 
     constructor(options: ReactionCollectorOptions) {
         super(options);
