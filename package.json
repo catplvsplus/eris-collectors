@@ -1,0 +1,11 @@
+{
+  "name": "eris-collectors",
+  "devDependencies": {
+    "@types/node": "^18.7.7",
+    "eris": "^0.17.1",
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "eris": "^0.17.1"
+  }
+}
