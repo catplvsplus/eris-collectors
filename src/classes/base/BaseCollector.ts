@@ -58,6 +58,8 @@ export class BaseCollector<Collected extends unknown = any> extends EventEmitter
 
     public start(): void {
         this._timer = setTimeout(() => this.stop('timeout'), this.timer);
+        this.ended = false;
+        this.endReason = undefined;
     }
 
     public stop(reason?: BaseCollectorEndReason|null): void {

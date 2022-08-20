@@ -38,30 +38,30 @@ export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownIn
     }
 
     private _collect(): void {
-        this._isEnded();
+        if (this._isEnded()) return;
 
         this.client.once('interactionCreate', async interaction => {
-            this._isEnded();
+            if (this._isEnded()) return;
 
-            if (!this.interactionType || this.interactionType && interaction.type !== this.interactionType) return;
+            if (this.interactionType && interaction.type !== this.interactionType) return this._collect();
             if (!this._isPong(interaction)) {
-                if (!this.guildID || this.guildID && interaction.guildID !== this.guildID) return;
-                if (!this.channelID || this.channelID && interaction.channel?.id !== this.channelID) return;
-                if (!this.userID || this.userID && interaction.user?.id !== this.channelID) return;
+                if (this.guildID && interaction.guildID !== this.guildID) return this._collect();
+                if (this.channelID && interaction.channel?.id !== this.channelID) return this._collect();
+                if (this.userID && interaction.user?.id !== this.channelID) return this._collect();
 
                 if (this._isMessageComponent(interaction)) {
-                    if (!this.customID || this.customID && interaction.data.custom_id !== this.customID) return;
+                    if (this.customID && interaction.data.custom_id !== this.customID) return this._collect();
                     
                     const parent = await interaction.getOriginalMessage();
-                    if (!this.messageID || this.messageID && parent.id !== this.messageID) return;
+                    if (this.messageID && parent.id !== this.messageID) return this._collect();
                 }
 
                 if (this._isCommand(interaction) || this._isAutocomplete(interaction)) {
-                    if (!this.commandName || this.commandName && interaction.data.name !== this.commandName) return;
+                    if (this.commandName && interaction.data.name !== this.commandName) return this._collect();
                 }
             }
 
-            if (!this.filter || this.filter && !(await Promise.resolve(this.filter(interaction)))) return;
+            if (this.filter && !(await Promise.resolve(this.filter(interaction)))) return this._collect();
             
             this.collected.set(interaction.id, interaction);
             this._collect();
