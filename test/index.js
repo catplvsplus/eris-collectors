@@ -1,15 +1,15 @@
+// @ts-check
 const eris = require('eris');
 const { MessageCollector, ReactionCollector, InteractionCollector } = require('../dist');
 
 require('dotenv').config();
 
-const client = new eris.Client(`Bot ${process.env.TOKEN}`, {
-    intents: ['all']
-});
+const client = new eris.Client(`Bot ${process.env.TOKEN}`);
 
 client.on('ready', () => console.log('ready!'));
 
-client.on('messageCreate', message => {
+client.on('messageCreate', async msg => {
+    const message = await client.getMessage(msg.channel.id, msg.id);
 
     switch (message.content) {
         case 'm':
@@ -27,7 +27,7 @@ client.on('messageCreate', message => {
             console.log(messageCollector);
             break;
         case 'r':
-            const reply = message.channel.createMessage({
+            const reply = await message.channel.createMessage({
                 content: 'React here!',
                 messageReference: {
                     messageID: message.id
@@ -56,6 +56,7 @@ client.on('messageCreate', message => {
                 commandName: 'test'
             });
 
+            // @ts-ignore
             interactionCollector.on('collect', interaction => { console.log(`Collected ${interaction.id}`); interaction.createMessage('Hi'); });
             interactionCollector.on('end', reason => console.log(reason, interactionCollector.collected.size));
 

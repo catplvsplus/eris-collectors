@@ -45,7 +45,7 @@ export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownIn
 
             if (this.interactionType && interaction.type !== this.interactionType) return this._collect();
             if (!this._isPong(interaction)) {
-                if (this.guildID && interaction.guildID !== this.guildID) return this._collect();
+                if (this.guildID && interaction.guildID && interaction.guildID !== this.guildID) return this._collect();
                 if (this.channelID && interaction.channel?.id !== this.channelID) return this._collect();
                 if (this.userID && interaction.user?.id !== this.channelID) return this._collect();
 
