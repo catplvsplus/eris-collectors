@@ -1,5 +1,15 @@
 {
   "name": "eris-collectors",
+  "description": "Collectors for eris based bots",
+  "version": "1.0.0",
+  "author": "GhexterCortes",
+  "main": "dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "clean": "npx rimraf dist",
     "build": "yarn run clean && npx tsc",
