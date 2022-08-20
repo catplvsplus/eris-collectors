@@ -5,6 +5,13 @@
   "author": "GhexterCortes",
   "main": "dist/index.js",
   "typings": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GhexterCortes/eris-collectors"
+  },
+  "bugs": {
+    "url": "https://github.com/GhexterCortes/eris-collectors/issues"
+  },
   "keywords": ["eris", "collection", "collector", "discord"],
   "files": [
     "dist",

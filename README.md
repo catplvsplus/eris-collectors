@@ -11,6 +11,8 @@ npm i eris-collectors
 ## Usage
 
 ```js
+const { MessageCollector } = require('eris-collectors');
+
 // Message collector
 const collector = new MessageCollector({
     client: bot, // Your bot client
@@ -30,6 +32,8 @@ collector.stop('Optional reason'); // Stop collecting messages
 ```
 
 ```js
+const { ReactionCollector } = require('eris-collectors');
+
 // Reaction collector
 const collector = new ReactionCollector({
     client: bot, // Your bot client
@@ -50,6 +54,8 @@ collector.stop('Optional reason'); // Stop collecting reactions
 ```
 
 ```js
+const { InteractionCollector } = require('eris-collectors');
+
 // Interaction collector
 const collector = new InteractionCollector({
     client: bot, // Your bot client
