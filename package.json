@@ -5,6 +5,7 @@
   "author": "GhexterCortes",
   "main": "dist/index.js",
   "typings": "./dist/index.d.ts",
+  "keywords": ["eris", "collection", "collector", "discord"],
   "files": [
     "dist",
     "LICENSE",
