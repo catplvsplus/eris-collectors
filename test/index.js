@@ -1,6 +1,7 @@
 // @ts-check
+const { CommandInteraction } = require('eris');
 const eris = require('eris');
-const { MessageCollector, ReactionCollector, InteractionCollector } = require('../dist');
+const { MessageCollector, ReactionCollector, InteractionCollector, awaitMessage, awaitReaction, awaitInteraction } = require('../dist');
 
 require('dotenv').config();
 
@@ -62,6 +63,41 @@ client.on('messageCreate', async msg => {
 
             interactionCollector.start();
             console.log(interactionCollector);
+            break;
+        case 'am':
+            const msg = await awaitMessage({
+                client,
+                channel: message.channel,
+                user: message.author,
+                filter: message => message.content === 'noob'
+            });
+
+            console.log(msg);
+            break;
+        case 'ar':
+            const _ = await message.channel.createMessage({
+                content: 'React here!',
+                messageReference: {
+                    messageID: message.id
+                }
+            });
+
+            const reaction = await awaitReaction({
+                client,
+                message: _,
+                user: message.author
+            });
+
+            console.log(reaction);
+            break;
+        case 'ai':
+            const interaction = await awaitInteraction({
+                client,
+                user: message.author,
+            });
+
+            // @ts-ignore
+            interaction.createMessage('hi');
             break;
     }
 });
