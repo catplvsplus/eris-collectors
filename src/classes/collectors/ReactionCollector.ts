@@ -1,14 +1,14 @@
-import { Guild, Member, Message, TextableChannel, User } from 'eris';
+import { Guild, Member, Message, TextableChannel, Uncached, User } from 'eris';
 import { Reaction } from '../../utils/util';
 import { BaseCollector, BaseCollectorOptions } from '../base/BaseCollector';
 
 export type ReactionCollectorKey = [userID: string, emoji: string];
 
 export interface ReactionCollectorOptions extends BaseCollectorOptions<Reaction, ReactionCollectorKey> {
-    user?: User|Member|string;
-    message?: Message|string;
-    channel?: TextableChannel|string;
-    guild?: Guild|string;
+    user?: User|Member|Uncached|string;
+    message?: Message|Uncached|string;
+    channel?: TextableChannel|Uncached|string;
+    guild?: Guild|Uncached|string;
     emojiName?: string;
     emojiId?: string;
 }
@@ -61,14 +61,16 @@ export class ReactionCollector extends BaseCollector<Reaction, ReactionCollector
     }
 }
 
-export async function awaitReaction(options: Omit<ReactionCollectorOptions, "timer" | "maxCollection">): Promise<Reaction> {
-    const collector = new ReactionCollector({ ...options, maxCollection: 1, timer: undefined });
+export async function awaitReaction(options: Omit<ReactionCollectorOptions, "timer" | "maxCollection" | "collected">): Promise<Reaction>;
+export async function awaitReaction(options: Omit<ReactionCollectorOptions, "timer" | "maxCollection" | "collected">, timer?: number): Promise<Reaction|null> {
+    const collector = new ReactionCollector({ ...options, maxCollection: 1, timer });
 
     collector.start();
 
     return new Promise((res, rej) => {
         collector.on("collect", reaction => res(reaction));
         collector.on("end", reason => {
+            if (reason === "timeout") return res(null);
             if (!collector.collected.size) return;
 
             rej(new Error(`Collector ended: ${reason || 'Unknown reason'}`));

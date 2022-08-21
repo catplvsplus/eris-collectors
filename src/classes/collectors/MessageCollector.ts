@@ -1,10 +1,10 @@
-import { Guild, Member, Message, PossiblyUncachedTextableChannel, TextableChannel, User } from 'eris';
+import { Guild, Member, Message, PossiblyUncachedTextableChannel, TextableChannel, Uncached, User } from 'eris';
 import { BaseCollector, BaseCollectorOptions } from '../base/BaseCollector';
 
 export interface MessageCollectorOptions extends BaseCollectorOptions<Message<PossiblyUncachedTextableChannel>> {
-    user?: User|Member|string;
-    channel?: TextableChannel|string;
-    guild?: Guild|string;
+    user?: User|Member|Uncached|string;
+    channel?: TextableChannel|Uncached|string;
+    guild?: Guild|Uncached|string;
 }
 
 export class MessageCollector extends BaseCollector<Message<PossiblyUncachedTextableChannel>> {
@@ -44,14 +44,16 @@ export class MessageCollector extends BaseCollector<Message<PossiblyUncachedText
     }
 }
 
-export async function awaitMessage(options: Omit<MessageCollectorOptions, "timer" | "maxCollection">): Promise<Message<PossiblyUncachedTextableChannel>> {
-    const collector = new MessageCollector({ ...options, maxCollection: 1, timer: undefined });
+export async function awaitMessage(options: Omit<MessageCollectorOptions, "timer" | "maxCollection" | "collected">): Promise<Message<PossiblyUncachedTextableChannel>>;
+export async function awaitMessage(options: Omit<MessageCollectorOptions, "timer" | "maxCollection" | "collected">, timer?: number): Promise<Message<PossiblyUncachedTextableChannel>|null> {
+    const collector = new MessageCollector({ ...options, maxCollection: 1, timer });
 
     collector.start();
 
     return new Promise((res, rej) => {
         collector.on("collect", message => res(message));
         collector.on("end", reason => {
+            if (reason === 'timeout') return rej(null);
             if (!collector.collected.size) return;
 
             rej(new Error(`Collector ended: ${reason || 'Unknown reason'}`));

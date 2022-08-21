@@ -6,7 +6,6 @@ import { Collection } from '../Collection';
 export type BaseCollectorEndReason = 'timeout'|'collectionLimit'|string;
 
 export interface BaseCollectorOptions<Collected extends unknown = any, Key extends unknown = any> {
-    captureRejections?: boolean;
     collected?: Collection<Key, Collected>;
     maxCollection?: number;
     filter?: (data: Collected) => Awaitable<boolean|void|undefined|null>;
@@ -47,7 +46,7 @@ export class BaseCollector<Collected extends unknown = any, Key extends unknown 
     protected _timer?: NodeJS.Timeout;
 
     constructor(options: BaseCollectorOptions<Collected, Key>) {
-        super(options);
+        super({ captureRejections: true });
 
         this.client = options.client;
         this.timer = options.timer;

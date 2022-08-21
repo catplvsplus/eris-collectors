@@ -1,11 +1,11 @@
-import { AnyInteraction, AutocompleteInteraction, CommandInteraction, ComponentInteraction, Constants, Guild, Interaction, Member, Message, PingInteraction, TextableChannel, UnknownInteraction, User } from 'eris';
+import { AnyInteraction, AutocompleteInteraction, CommandInteraction, ComponentInteraction, Constants, Guild, Interaction, Member, Message, PingInteraction, TextableChannel, Uncached, UnknownInteraction, User } from 'eris';
 import { BaseCollector, BaseCollectorOptions } from '../base/BaseCollector';
 
 export interface InteractionCollectorOptions extends BaseCollectorOptions<AnyInteraction|UnknownInteraction> {
-    user?: User|Member|string;
-    message?: Message|string;
-    channel?: TextableChannel|string;
-    guild?: Guild|string;
+    user?: User|Member|Uncached|string;
+    message?: Message|Uncached|string;
+    channel?: TextableChannel|Uncached|string;
+    guild?: Guild|Uncached|string;
     custom_id?: string;
     commandName?: string;
     interactionType?: keyof Constants["InteractionTypes"]|number;
@@ -86,14 +86,16 @@ export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownIn
     }
 }
 
-export async function awaitInteraction(options: Omit<InteractionCollectorOptions, "timer" | "maxCollection">) {
-    const collector = new InteractionCollector({ ...options, maxCollection: 1, timer: undefined });
+export async function awaitInteraction(options: Omit<InteractionCollectorOptions, "timer" | "maxCollection" | "collected">): Promise<AnyInteraction|UnknownInteraction>;
+export async function awaitInteraction(options: Omit<InteractionCollectorOptions, "timer" | "maxCollection" | "collected">, timer?: number): Promise<AnyInteraction|UnknownInteraction|null> {
+    const collector = new InteractionCollector({ ...options, maxCollection: 1, timer });
 
     collector.start();
 
     return new Promise((res, rej) => {
         collector.on("collect", interaction => res(interaction));
         collector.on("end", reason => {
+            if (reason === 'timeout') return rej(reason);
             if (!collector.collected.size) return;
 
             rej(new Error(`Collector ended: ${reason || 'Unknown reason'}`));
