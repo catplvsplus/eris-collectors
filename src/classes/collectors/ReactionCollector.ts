@@ -60,3 +60,18 @@ export class ReactionCollector extends BaseCollector<Reaction, ReactionCollector
         });
     }
 }
+
+export async function awaitReaction(options: Omit<ReactionCollectorOptions, "timer" | "maxCollection">): Promise<Reaction> {
+    const collector = new ReactionCollector({ ...options, maxCollection: 1, timer: undefined });
+
+    collector.start();
+
+    return new Promise((res, rej) => {
+        collector.on("collect", reaction => res(reaction));
+        collector.on("end", reason => {
+            if (!collector.collected.size) return;
+
+            rej(new Error(`Collector ended: ${reason || 'Unknown reason'}`));
+        });
+    });
+}

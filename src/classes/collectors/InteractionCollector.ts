@@ -85,3 +85,18 @@ export class InteractionCollector extends BaseCollector<AnyInteraction|UnknownIn
         return interaction.type === Constants.InteractionTypes.APPLICATION_COMMAND_AUTOCOMPLETE;
     }
 }
+
+export async function awaitInteraction(options: Omit<InteractionCollectorOptions, "timer" | "maxCollection">) {
+    const collector = new InteractionCollector({ ...options, maxCollection: 1, timer: undefined });
+
+    collector.start();
+
+    return new Promise((res, rej) => {
+        collector.on("collect", interaction => res(interaction));
+        collector.on("end", reason => {
+            if (!collector.collected.size) return;
+
+            rej(new Error(`Collector ended: ${reason || 'Unknown reason'}`));
+        });
+    });
+}

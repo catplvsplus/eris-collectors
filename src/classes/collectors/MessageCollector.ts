@@ -43,3 +43,18 @@ export class MessageCollector extends BaseCollector<Message<PossiblyUncachedText
         });
     }
 }
+
+export async function awaitMessage(options: Omit<MessageCollectorOptions, "timer" | "maxCollection">): Promise<Message<PossiblyUncachedTextableChannel>> {
+    const collector = new MessageCollector({ ...options, maxCollection: 1, timer: undefined });
+
+    collector.start();
+
+    return new Promise((res, rej) => {
+        collector.on("collect", message => res(message));
+        collector.on("end", reason => {
+            if (!collector.collected.size) return;
+
+            rej(new Error(`Collector ended: ${reason || 'Unknown reason'}`));
+        });
+    });
+}

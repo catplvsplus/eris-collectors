@@ -11,7 +11,7 @@ export interface BaseCollectorOptions<Collected extends unknown = any, Key exten
     maxCollection?: number;
     filter?: (data: Collected) => Awaitable<boolean|void|undefined|null>;
     client: Client;
-    timer: number;
+    timer?: number;
 }
 
 export interface BaseCollectorEvents<Collected extends unknown> {
@@ -38,7 +38,7 @@ export interface BaseCollector<Collected extends unknown = any, Key extends unkn
 
 export class BaseCollector<Collected extends unknown = any, Key extends unknown = string> extends EventEmitter {
     public client: Client;
-    public timer: number;
+    public timer?: number;
     public ended: boolean = false;
     public maxCollection: number;
     public collected: Collection<Key, Collected>;
@@ -57,15 +57,14 @@ export class BaseCollector<Collected extends unknown = any, Key extends unknown 
     }
 
     public start(): void {
-        this._timer = setTimeout(() => this.stop('timeout'), this.timer);
+        this._timer = typeof this.timer == 'number' ? setTimeout(() => this.stop('timeout'), this.timer) : undefined;
         this.ended = false;
         this.endReason = undefined;
     }
 
     public stop(reason?: BaseCollectorEndReason|null): void {
-        if (!this._timer) return void 0;
-
-        clearTimeout(this.timer);
+        if (this.timer) clearTimeout(this.timer);
+        
         this._timer = undefined;
         this.ended = true;
         this.endReason = reason;
