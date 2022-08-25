@@ -18,7 +18,7 @@ const collector = new MessageCollector({
     client: bot, // Your bot client
     timer: 1000 * 60, // In milliseconds
     maxCollection: 10, // Optional max collected messages
-    filter: message => !message.autor.bot, // Optional custom collector filter
+    filter: message => !message.author.bot, // Optional custom collector filter
     user: '000000000000000000', // Optional, Collect messages from a specific user
     channel: '000000000000000000', // Optional, Collect messages from this specific channel
     guild: '000000000000000000', // Optional, Collect messages from this specific guild
@@ -39,7 +39,7 @@ const collector = new ReactionCollector({
     client: bot, // Your bot client
     timer: 1000 * 60, // In milliseconds
     maxCollection: 10, // Optional max collected reactions
-    filter: message => !message.autor.bot, // Optional custom collector filter
+    filter: reaction => !reaction.reactor.bot, // Optional custom collector filter
     user: '000000000000000000', // Optional, Collect reactions from a specific user
     message: '000000000000000000', // Optional, Collect reactions from a specific message 
     channel: '000000000000000000', // Optional, Collect reactions from this specific channel
@@ -61,7 +61,7 @@ const collector = new InteractionCollector({
     client: bot, // Your bot client
     timer: 1000 * 60, // In milliseconds
     maxCollection: 10, // Optional max collected interactions
-    filter: message => !message.autor.bot, // Optional custom collector filter
+    filter: interaction => interaction.data.name == 'command', // Optional custom collector filter
     user: '000000000000000000', // Optional, Collect interactions from a specific user
     message: '000000000000000000', // Optional, Collect component interactions from a specific message
     channel: '000000000000000000', // Optional, Collect interactions from this specific channel
@@ -75,4 +75,49 @@ collector.on('end', reason => {}); // Emitted when the collector stopped
 
 collector.start(); // Start collecting interactions
 collector.stop('Optional reason'); // Stop collecting interactions
+```
+
+### Awaiters
+
+```js
+const { awaitMessage } = require('eris-collectors');
+
+// In an async function
+const message = await awaitMessage({
+    client: bot, // Your bot client
+    filter: message => !message.author.bot, // Optional custom awaiter filter
+    user: '000000000000000000', // Optional, Await message from a specific user
+    channel: '000000000000000000', // Optional, Await message from this specific channel
+    guild: '000000000000000000', // Optional, Await message from this specific guild
+});
+```
+
+```js
+const { awaitReaction } = require('eris-collectors');
+
+// In an async function
+const message = await awaitReaction({
+    client: bot, // Your bot client
+    filter: reaction => !reaction.reactor.bot, // Optional custom awaiter filter
+    user: '000000000000000000', // Optional, Await reaction from a specific user
+    message: '000000000000000000', // Optional, Await reaction from a specific message 
+    channel: '000000000000000000', // Optional, Await reaction from this specific channel
+    guild: '000000000000000000', // Optional, Await reaction from this specific guild
+});
+```
+
+```js
+const { awaitInteraction } = require('eris-collectors');
+
+// In an async function
+const message = await awaitReaction({
+    client: bot, // Your bot client
+    filter: interaction => interaction.data.name == 'command', // Optional custom awaiter filter
+    user: '000000000000000000', // Optional, Await interaction from a specific user
+    message: '000000000000000000', // Optional, Await component interaction from a specific message
+    channel: '000000000000000000', // Optional, Await interaction from this specific channel
+    guild: '000000000000000000', // Optional, Await interaction from this specific guild
+    custom_id: '', // Optional, Await interaction with this custom_id
+    commandName: '' // Optional, Await interaction with this command name
+});
 ```
