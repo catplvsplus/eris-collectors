@@ -110,7 +110,7 @@ const message = await awaitReaction({
 const { awaitInteraction } = require('eris-collectors');
 
 // In an async function
-const message = await awaitInteraction({
+const message = await awaitReaction({
     client: bot, // Your bot client
     filter: interaction => interaction.data.name == 'command', // Optional custom awaiter filter
     user: '000000000000000000', // Optional, Await interaction from a specific user
