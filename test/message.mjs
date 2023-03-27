@@ -1,6 +1,8 @@
 import { Client } from "eris";
 import { MessageCollector } from '../dist/esm.mjs';
 
+// @ts-check
+
 /**
  * 
  * @param {Client} client 
