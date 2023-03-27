@@ -1,42 +1,49 @@
 {
-  "name": "eris-collectors",
-  "description": "Collectors for eris based bots",
-  "version": "1.1.2",
-  "author": "GhexterCortes",
-  "main": "dist/index.js",
-  "typings": "./dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/GhexterCortes/eris-collectors"
-  },
-  "bugs": {
-    "url": "https://github.com/GhexterCortes/eris-collectors/issues"
-  },
-  "keywords": [
-    "eris",
-    "collection",
-    "collector",
-    "discord"
-  ],
-  "files": [
-    "dist",
-    "LICENSE",
-    "README.md"
-  ],
-  "scripts": {
-    "clean": "npx rimraf dist",
-    "build": "yarn run clean && npx tsc",
-    "build:publish": "yarn run build && yarn publish",
-    "test": "yarn run build && cd test && node ."
-  },
-  "devDependencies": {
-    "@types/node": "^18.7.7",
-    "dotenv": "^16.0.1",
-    "eris": "^0.17.1",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.7.4"
-  },
-  "peerDependencies": {
-    "eris": "^0.17.1"
-  }
+    "name": "eris-collectors",
+    "description": "Collection of collectors for eris",
+    "version": "2.0.0",
+    "main": "./dist/index.js",
+    "module": "./dist/esm.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/esm.mjs",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NotGhex/eris-collectors"
+    },
+    "bugs": {
+        "url": "https://github.com/NotGhex/eris-collectors/issues"
+    },
+    "keywords": [
+        "eris",
+        "collection",
+        "collector",
+        "discord"
+    ],
+    "files": [
+        "dist",
+        "LICENSE"
+    ],
+    "scripts": {
+        "clean": "npx rimraf ./dist",
+        "build": "npm run clean && npx tsc"
+    },
+    "dependencies": {
+        "@discordjs/collection": "^1.4.0"
+    },
+    "devDependencies": {
+        "@types/node": "^18.15.10",
+        "dotenv": "^16.0.3",
+        "eris": "^0.17.2",
+        "rimraf": "^4.4.1",
+        "typescript": "^5.0.2"
+    },
+    "peerDependencies": {
+        "eris": "^0.17.2"
+    }
 }
