@@ -59,7 +59,7 @@ export function interactionCollector(client) {
         collector.on('userCreate', user => console.log(`user interact: ${user.id}`));
 
         collector.on('end', async (collection, reason) => {
-            console.log('InteractionCollector ended!');
+            console.log(`InteractionCollector ended: ${reason || 'No reason'}`);
 
             await reply.edit({
                 content: reason || 'No reason',

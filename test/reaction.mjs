@@ -33,7 +33,7 @@ export function reactionCollector(client) {
         collector.on('reactorDelete', async (reactor) => console.log(`Reactor Delete: ${reactor.tag}`));
 
         collector.on('end', async (collection, reason) => {
-            console.log('ReactionCollector ended!');
+            console.log(`ReactionCollector ended: ${reason || 'No reason'}`);
 
             await reply.edit({
                 content: reason || 'No reason',

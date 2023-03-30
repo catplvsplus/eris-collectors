@@ -24,7 +24,7 @@ export function messageCollector(client) {
         collector.on('disposed', async (collected) => console.log(`Disposed Message: ${collected.id}`));
 
         collector.on('end', async (collection, reason) => {
-            console.log('MessageCollector ended!');
+            console.log(`MessageCollector ended: ${reason || 'No reason'}`);
 
             await client.createMessage(message.channelID, {
                 content: reason || 'No reason',
