@@ -27,7 +27,7 @@ export function reactionCollector(client) {
 
         console.log(`Started ReactionCollector!`);
 
-        collector.on('collect', async (collected) => console.log(`Collected Reaction: ${collected.id}`));
+        collector.on('collect', async (collected) => console.log(`Collected Reaction: ${collected.id} ${collected.burst ? '(burst)' : ''}`));
         collector.on('dispose', async (collected) => console.log(`Disposed Reaction: ${collected.id}`));
         collector.on('reactorAdd', async (reactor) => console.log(`Reactor Add: ${reactor.tag}`));
         collector.on('reactorDelete', async (reactor) => console.log(`Reactor Delete: ${reactor.tag}`));
