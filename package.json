@@ -37,7 +37,8 @@
     ],
     "scripts": {
         "clean": "npx rimraf ./dist",
-        "build": "tsup"
+        "build": "tsup",
+        "prepack": "npm run build"
     },
     "dependencies": {
         "@discordjs/collection": "^2.1.1"
