@@ -1,5 +1,5 @@
-import { Collector, CollectorEvents, CollectorOptions } from './Collector';
-import { decrementMaxEventListeners, incrementMaxEventListeners } from '../utils/adjustMaxEventListeners';
+import { Collector, CollectorEvents, CollectorOptions } from './Collector.js';
+import { decrementMaxEventListeners, incrementMaxEventListeners } from '../utils/adjustMaxEventListeners.js';
 import { Collection } from '@discordjs/collection';
 import { AnyChannel, AnyThreadChannel, Constants, AnyInteraction as ErisAnyInteraction, Guild, InteractionTypes, Message, PingInteraction, PossiblyUncachedMessage, TextableChannel, Uncached, User } from 'eris';
 

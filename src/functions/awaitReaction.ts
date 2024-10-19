@@ -1,4 +1,4 @@
-import { ReactionCollector, ReactionCollectorOptions, CollectedMessageReaction } from '../classes/ReactionCollector';
+import { ReactionCollector, ReactionCollectorOptions, CollectedMessageReaction } from '../classes/ReactionCollector.js';
 import { Collection } from '@discordjs/collection';
 
 export async function awaitReaction(options: ReactionCollectorOptions & { max?: 1; }): Promise<undefined|CollectedMessageReaction>;

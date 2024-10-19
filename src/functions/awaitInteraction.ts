@@ -1,4 +1,4 @@
-import { InteractionCollector, InteractionCollectorOptions, AnyInteraction } from '../classes/InteractionCollector';
+import { InteractionCollector, InteractionCollectorOptions, AnyInteraction } from '../classes/InteractionCollector.js';
 import { Collection } from '@discordjs/collection';
 
 export async function awaitInteraction<T extends AnyInteraction = AnyInteraction>(options: InteractionCollectorOptions & { max?: 1; }): Promise<undefined|T>;

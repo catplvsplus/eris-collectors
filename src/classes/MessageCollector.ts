@@ -1,5 +1,5 @@
-import { Collector, CollectorOptions } from './Collector';
-import { decrementMaxEventListeners, incrementMaxEventListeners } from '../utils/adjustMaxEventListeners';
+import { Collector, CollectorOptions } from './Collector.js';
+import { decrementMaxEventListeners, incrementMaxEventListeners } from '../utils/adjustMaxEventListeners.js';
 import { AnyChannel, AnyThreadChannel, Constants, Guild, GuildTextableChannel, Message, PossiblyUncachedMessage, TextableChannel, Uncached } from 'eris';
 
 export interface MessageCollectorOptions extends CollectorOptions<Message> {

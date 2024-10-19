@@ -1,5 +1,5 @@
 import { Message } from 'eris';
-import { MessageCollector, MessageCollectorOptions } from '../classes/MessageCollector';
+import { MessageCollector, MessageCollectorOptions } from '../classes/MessageCollector.js';
 import { Collection } from '@discordjs/collection';
 
 export async function awaitMessage(options: MessageCollectorOptions & { max?: 1; }): Promise<undefined|Message>;

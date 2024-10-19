@@ -1,6 +1,6 @@
 import { Client } from 'eris';
 import { Collection } from '@discordjs/collection';
-import { TypedEmitter } from './TypedEmitter';
+import { TypedEmitter } from './TypedEmitter.js';
 
 export interface CollectorOptions<Collected> {
     max?: number;
