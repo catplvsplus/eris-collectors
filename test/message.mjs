@@ -1,5 +1,5 @@
 import { Client } from "eris";
-import { MessageCollector } from '../dist/esm.mjs';
+import { MessageCollector } from 'eris-collectors';
 
 // @ts-check
 

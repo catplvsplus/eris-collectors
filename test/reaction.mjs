@@ -1,5 +1,5 @@
 import { Client } from 'eris';
-import { ReactionCollector } from '../dist/esm.mjs';
+import { ReactionCollector } from 'eris-collectors';
 
 /**
  * 

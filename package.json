@@ -52,5 +52,8 @@
     },
     "peerDependencies": {
         "eris": "^0.17.2 || ^0.18.0"
-    }
+    },
+    "workspaces": [
+        "test"
+    ]
 }

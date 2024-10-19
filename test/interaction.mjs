@@ -1,5 +1,5 @@
 import { Client, Constants } from "eris";
-import { InteractionCollector } from '../dist/esm.mjs';
+import { InteractionCollector } from 'eris-collectors';
 
 // @ts-check
 
