@@ -56,7 +56,7 @@ export function interactionCollector(client) {
             interaction.deferUpdate();
         });
 
-        collector.on('userCreate', user => console.log(`user interact: ${user.id}`));
+        collector.on('userCreate', user => console.log(`user interact: ${user.username}`));
 
         collector.on('end', async (collection, reason) => {
             console.log(`InteractionCollector ended: ${reason || 'No reason'}`);
