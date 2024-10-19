@@ -57,7 +57,7 @@ export class MessageCollector extends Collector<Message> {
     }
 
     protected async _handleGuildDelete(guild: Uncached|Guild): Promise<void> {
-        if (this.channel.type === Constants.ChannelTypes.DM || this.channel.type === Constants.ChannelTypes.GROUP_DM) return;
+        if (this.channel.type === Constants.ChannelTypes.DM) return;
         if ((this.channel as GuildTextableChannel).guild.id === guild.id) this.stop('guildDelete');
     }
 

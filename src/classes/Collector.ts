@@ -165,7 +165,7 @@ export abstract class Collector<Collected, Events extends CollectorEvents<Collec
     }
 
     public toArray(): Collected[] {
-        return this.collection.toJSON();
+        return Array.from(this.collection.values());
     }
 
     protected abstract _collect(...args: any[]): Promise<[string, any]|null>;
