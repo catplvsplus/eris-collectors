@@ -5,10 +5,6 @@ Create interaction, message, and reaction collectors easily with **eris-collecto
 - [Collector Usage](#collector-usage)
 - [Awaiter Usage](#awaiter-usage)
 
-<!-- TODO: To be removed soon -->
-> - Moving to v2? see [eris-collectors v2 Breaking Changes](https://github.com/NotGhex/eris-collectors/blob/87d22e126f42b943607515cc5e3436304c84e0ba/MovingToV2.md)
-> - See also [oceanic-collector](https://www.npmjs.com/package/oceanic-collector)
-
 ```
 npm i eris-collectors
 yarn add eris-collectors
