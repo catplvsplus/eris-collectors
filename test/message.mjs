@@ -26,7 +26,7 @@ export function messageCollector(client) {
         collector.on('end', async (collection, reason) => {
             console.log(`MessageCollector ended: ${reason || 'No reason'}`);
 
-            await client.createMessage(message.channelID, {
+            await client.createMessage(message.channel.id, {
                 content: reason || 'No reason',
                 embeds: [
                     {

@@ -6,6 +6,7 @@ import { AnyChannel, AnyThreadChannel, Guild, Member, Message, PartialEmoji, Pos
 export interface CollectedMessageReaction {
     id: string;
     emoji: PartialEmoji;
+    burst: boolean;
     messageID: string;
     message: PossiblyUncachedMessage;
     channelID?: string;
@@ -100,7 +101,7 @@ export class ReactionCollector extends Collector<CollectedMessageReaction, React
         if (guild.id === this.message.guildID) this.stop('guildDelete');
     }
 
-    protected async _collect(message: PossiblyUncachedMessage, emoji: PartialEmoji, reactor: Uncached|User|Member): Promise<[string, CollectedMessageReaction] | null> {
+    protected async _collect(message: PossiblyUncachedMessage, emoji: PartialEmoji, reactor: Uncached|User|Member, burst: boolean): Promise<[string, CollectedMessageReaction] | null> {
         const emojiID = ReactionCollector.getEmojiID(emoji);
         const reactedUser = this.reactors.find(r => reactor.id === r.id);
 
@@ -111,10 +112,10 @@ export class ReactionCollector extends Collector<CollectedMessageReaction, React
 
         this.emit('reactorAdd', reactor, emoji);
 
-        return message.id === this.message.id ? [ReactionCollector.getEmojiID(emoji), this.parseReaction(message, emoji, reactor)] : null;
+        return message.id === this.message.id ? [ReactionCollector.getEmojiID(emoji), this.parseReaction(message, emoji, reactor, burst)] : null;
     }
 
-    protected async _dispose(message: PossiblyUncachedMessage, emoji: PartialEmoji, reactorID: string): Promise<[string, CollectedMessageReaction] | null> {
+    protected async _dispose(message: PossiblyUncachedMessage, emoji: PartialEmoji, reactorID: string, burst: boolean): Promise<[string, CollectedMessageReaction] | null> {
         const emojiID = ReactionCollector.getEmojiID(emoji);
         const reactedUser = this.reactors.find(r => reactorID === r.id && r.reactions.includes(emojiID));
 
@@ -133,7 +134,7 @@ export class ReactionCollector extends Collector<CollectedMessageReaction, React
             this.emit('reactorDelete', member || user || { id: reactorID }, emoji);
         }
 
-        return message.id === this.message.id ? [ReactionCollector.getEmojiID(emoji), this.parseReaction(message, emoji, { id: reactorID })] : null;
+        return message.id === this.message.id ? [ReactionCollector.getEmojiID(emoji), this.parseReaction(message, emoji, { id: reactorID }, burst)] : null;
     }
 
     public empty(): void {
@@ -141,10 +142,11 @@ export class ReactionCollector extends Collector<CollectedMessageReaction, React
         super.empty();
     }
 
-    public parseReaction(message: PossiblyUncachedMessage, emoji: PartialEmoji, reactor: Uncached|User|Member): CollectedMessageReaction {
+    public parseReaction(message: PossiblyUncachedMessage, emoji: PartialEmoji, reactor: Uncached|User|Member, burst: boolean): CollectedMessageReaction {
         return {
             id: ReactionCollector.getEmojiID(emoji),
             emoji,
+            burst,
             messageID: message.id,
             message,
             channelID: message.channel.id,

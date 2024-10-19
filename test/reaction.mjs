@@ -13,7 +13,7 @@ export function reactionCollector(client) {
             content: 'Reaction collector',
             messageReference: {
                 failIfNotExists: true,
-                channelID: message.channelID,
+                channelID: message.channel.id,
                 guildID: message.guildID,
                 messageID: message.id
             }
